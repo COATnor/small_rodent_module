@@ -120,13 +120,13 @@
 preprocess_classifications <- function(dat_name = dat_name, meta_name = meta_name, out_dir = out_dir, save = FALSE, keep_manual = "low_confidence", is.dir = TRUE) {
   
   ## load libraries
-  if (!require('tidyverse')) install.packages('tidyverse'); library('tidyverse')
-  if (!require('lubridate')) install.packages('lubridate'); library('lubridate')
+  #if (!require('tidyverse')) install.packages('tidyverse'); library('tidyverse')
+  #if (!require('lubridate')) install.packages('lubridate'); library('lubridate')
   
   
   ## clear workspace and free some memory (R will crash if all memory is used)
   suppressWarnings(remove(list = c("dat_1", "dat_2", "dat_3", "dat_all", "dat_animal_empty_bad_quality", "dat_events_manual", "dat_motion", "dat_new", 
-                                   "test", "events_manual", "events_same", "events_check", "images_manual", "images_same"))) 
+                                   "test", "events_manual", "events_same", "events_check", "images_manual", "images_same", "dat_final"))) 
   gc(reset = TRUE)
   
   ## load data
@@ -137,6 +137,10 @@ preprocess_classifications <- function(dat_name = dat_name, meta_name = meta_nam
   } else {
     dat <- dat_name
     meta <- meta_name
+    
+    rm(dat_name, meta_name)
+    gc(reset = TRUE)
+    
     dat_name <- paste(dat$sn_locality[1], dat$t_date[nrow(dat)])
   }
   
@@ -166,6 +170,7 @@ preprocess_classifications <- function(dat_name = dat_name, meta_name = meta_nam
   remove(dat)
   remove(meta)
   gc(reset = TRUE)
+
   
   ## keep the image with manual classification ----------------
   
@@ -397,6 +402,10 @@ add_cameras <- function(data_list, max_year) {
   
   # Combine all data files
   dat <- bind_rows(data_list)
+  #dat <- data.table::rbindlist(data_list)
+  
+  rm(list = deparse(substitute(data_list)), envir = .GlobalEnv)
+  gc(reset = TRUE)
   
   # Ensure t_date is in Date format
   dat <- dat %>% mutate(t_date = ymd(t_date))
@@ -458,6 +467,10 @@ add_cameras <- function(data_list, max_year) {
       v_class_id = list(unique(dat$v_class_id[dat$sn_site == sn_site]))
     ) %>%
     unnest(v_class_id)
+  
+  rm(list = c("all_dates", "site_date_ranges"))
+  gc(reset = TRUE)
+  
   
   # Combine the original data with the missing dates
   dat <- bind_rows(dat, missing_dates) %>%
