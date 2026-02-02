@@ -26,7 +26,7 @@ rm(list = ls())
 
 ## load libraries, missing packages will be installed
 if (!require("remotes")) install.packages("remotes")
-if (!require("ckanr")) remotes::install_github("ropensci/ckanr"); library("ckanr")
+if (!require("ckanr")) remotes::install_github("hannaboe/ckanr"); library("ckanr")
 if (!require("tidyverse")) install.packages("tidyverse"); library("tidyverse")
 if (!require("lubridate")) install.packages("tidyverse"); library("lubridate")
 if (!require("arrow")) install.packages("tidyverse"); library("arrow")
@@ -34,7 +34,7 @@ if (!require("arrow")) install.packages("tidyverse"); library("arrow")
 
 ## download functions from github
 source("https://github.com/COATnor/data_management_scripts/blob/master/download_data_from_coat_data_portal.R?raw=TRUE")
-source("https://github.com/COATnor/data_preprocessing_scripts/blob/master/function_preprocessing_image_classifications_small_mamma_camara_traps.R?raw=TRUE")
+source("https://github.com/COATnor/small_rodent_module/blob/main/data_preprocessing_scripts/function_preprocessing_image_classifications_small_mamma_camara_traps.R?raw=TRUE")
 
 
 ## ---------------------------------- ##
@@ -43,7 +43,7 @@ source("https://github.com/COATnor/data_preprocessing_scripts/blob/master/functi
 
 ## SET UP THE CONNECTION TO THE COAT DATA PORTAL
 ckanr_setup(url = "https://data.coat.no", 
-            key = Sys.getenv("api_COAT")) 
+            key = "fdf0f88d-0dbb-4173-ab45-fe34191ac490") 
 
 ## DOWNLOAD SNAP TRAP DATA --------
 
@@ -65,13 +65,16 @@ for (i in 1:length(years)) {
 ## combine all files
 snap_dat <- do.call(rbind, snap_list)
 
+rm(snap_list)
+gc(reset = TRUE)
+
 
 ## DOWNLOAD CAMERA TRAP DATA --------
 
 ## define year(s) for which the data should be downloaded
-years_ko <- 2016:2024  # komagdalen lemming blocks
-years_vj <- 2019:2024  # vestre jakobselv lemming blocks
-years_rv <- 2021:2024  # river valleys
+years_ko <- 2016:2025  # komagdalen lemming blocks
+years_vj <- 2019:2025  # vestre jakobselv lemming blocks
+years_rv <- 2021:2025  # river valleys
 
 ## specify filenames
 names_class_lb <- c(paste0("V_rodents_cameratraps_image_classification_lemming_blocks_komagdalen_", years_ko, ".parquet"),
@@ -88,18 +91,18 @@ names_meta_rv <- c(paste0("V_rodents_cameratraps_image_metadata_intensive_quadra
 
 
 ## download image classification and metadata for lemming blocks
-classification_lb_list <- download_coat_data(name = "v_rodents_cameratraps_image_classification_lemming_blocks_v4",
+classification_lb_list <- download_coat_data(name = "v_rodents_cameratraps_image_classification_lemming_blocks_v5",
                                              filenames = names_class_lb) 
 
-metadata_lb_list <- download_coat_data(name = "v_rodents_cameratraps_image_metadata_lemming_blocks_v4",
+metadata_lb_list <- download_coat_data(name = "v_rodents_cameratraps_image_metadata_lemming_blocks_v5",
                                        filenames = names_meta_lb) 
 
 
 ## download image classification and metadata for river valleys
-classification_rv_list <- download_coat_data(name = "v_rodents_cameratraps_image_classification_intensive_quadrats_v3",
+classification_rv_list <- download_coat_data(name = "v_rodents_cameratraps_image_classification_intensive_quadrats_v4",
                                              filenames = names_class_rv) 
 
-metadata_rv_list <- download_coat_data(name = "v_rodents_cameratraps_image_metadata_intensive_quadrats_v3",
+metadata_rv_list <- download_coat_data(name = "v_rodents_cameratraps_image_metadata_intensive_quadrats_v4",
                                        filenames = names_meta_rv) 
 
 
@@ -111,8 +114,16 @@ metadata_rv_list <- download_coat_data(name = "v_rodents_cameratraps_image_metad
 ## lemming blocks
 lb_processed <- c()
 
-for (i in 1:length(classification_lb_list)) {
-  lb_processed[[i]] <- preprocess_classifications(dat_name = classification_lb_list[[i]], meta_name = metadata_lb_list[[i]], is.dir = FALSE)  # keep only one image per trigger
+for (i in 1:length(names_class_lb)) {
+  classification_dat <- download_coat_data(name = "v_rodents_cameratraps_image_classification_lemming_blocks_v5",
+                                           filenames = names_class_lb[i]) 
+  meta_dat <- download_coat_data(name = "v_rodents_cameratraps_image_metadata_lemming_blocks_v5",
+                                 filenames = names_meta_lb[i])
+  
+  print(paste("downloaded", names_class_lb[i]))
+  
+  
+  lb_processed[[i]] <- preprocess_classifications(dat_name = classification_dat[[1]], meta_name = meta_dat[[1]], is.dir = FALSE)  # keep only one image per trigger
   lb_processed[[i]] <- filter_bad_quality(data = lb_processed[[i]])  # set images with bad quality to NA
   lb_processed[[i]]$t_year <- sub(".*_(\\d{4})\\.parquet$", "\\1", names_class_lb[i])  # add year 
 }
@@ -120,14 +131,21 @@ for (i in 1:length(classification_lb_list)) {
 ## ko 2024 -> 2 missing images -> all classes NA -> ok
 ## vj 2023 -> image with tow animals -> ok
 
-lb_dat <- add_cameras(lb_processed, max_year = 2024)  # add missing cameras
+rm(list = c("classification_dat", "meta_dat"))
+gc(reset = TRUE)
+
+lb_dat <- add_cameras(lb_processed, max_year = 2025)  # add missing cameras
 
 lb_dat <- tidyr::fill(lb_dat, t_year, .direction = "down")  # fill NAs in t_year with value above
 
 ## fix some years
-lb_dat$t_year[lb_dat$sn_site == "ko_kj_sn_25" & lb_dat$t_date > "2018-07-05" & lb_dat$t_date < "2019-07-11"] <- "2019"
-lb_dat$t_year[lb_dat$sn_site == "ko_ry_hu_3" & lb_dat$t_date > "2018-07-05" & lb_dat$t_date < "2019-07-08"] <- "2019"
-lb_dat$t_year[lb_dat$sn_site == "ko_ry_sn_6b" & lb_dat$t_date > "2021-07-10" & lb_dat$t_date < "2022-07-04"] <- "2022"
+setDT(lb_dat)
+lb_dat[sn_site == "ko_kj_sn_25" & t_date > "2018-07-05" & t_date < "2019-07-11", t_year := "2019"]
+lb_dat[sn_site == "ko_ry_hu_3" & t_date > "2018-07-05" & t_date < "2019-07-08", t_year := "2019"]
+lb_dat[sn_site == "ko_ry_sn_6b" & t_date > "2021-07-10" & t_date < "2022-07-04", t_year := "2019"]
+
+
+## find a way to check if years of the new data have to be fixed
 
 
 ## river valleys
