@@ -33,7 +33,7 @@ if (!require("arrow")) install.packages("tidyverse"); library("arrow")
 
 ## download functions from github
 source("https://github.com/COATnor/data_management_scripts/blob/master/download_data_from_coat_data_portal.R?raw=TRUE")
-source("https://github.com/COATnor/data_preprocessing_scripts/blob/master/function_preprocessing_image_classifications_small_mamma_camara_traps.R?raw=TRUE")
+source("https://github.com/COATnor/small_rodent_module/blob/main/data_preprocessing_scripts/function_preprocessing_image_classifications_small_mamma_camara_traps.R?raw=TRUE")
 
 
 ## ---------------------------------- ##
@@ -48,9 +48,9 @@ ckanr_setup(url = "https://data.coat.no",
 ## DOWNLOAD CAMERA TRAPPING DATA
 
 ## define year(s) for which the data should be downloaded
-years_ko <- 2016:2024  # komagdalen lemming blocks
-years_vj <- 2019:2024  # vestre jakobselv lemming blocks
-years_rv <- 2021:2024  # river valleys
+years_ko <- 2016:2025  # komagdalen lemming blocks
+years_vj <- 2019:2025  # vestre jakobselv lemming blocks
+years_rv <- 2021:2025  # river valleys
 
 ## specify filenames
 names_class_lb <- c(paste0("V_rodents_cameratraps_image_classification_lemming_blocks_komagdalen_", years_ko, ".parquet"),
@@ -66,42 +66,50 @@ names_meta_rv <- c(paste0("V_rodents_cameratraps_image_metadata_intensive_quadra
                    paste0("V_rodents_cameratraps_image_metadata_intensive_quadrats_vestre_jakobselv_", years_rv, ".parquet"))
 
 
-## download image classification and metadata for lemming blocks
-classification_lb_list <- download_coat_data(name = "v_rodents_cameratraps_image_classification_lemming_blocks_v4",
-                                             filenames = names_class_lb) 
-
-metadata_lb_list <- download_coat_data(name = "v_rodents_cameratraps_image_metadata_lemming_blocks_v4",
-                                       filenames = names_meta_lb) 
-
-
-## download image classification and metadata for river valleys
-classification_rv_list <- download_coat_data(name = "v_rodents_cameratraps_image_classification_intensive_quadrats_v3",
-                                             filenames = names_class_rv) 
-
-metadata_rv_list <- download_coat_data(name = "v_rodents_cameratraps_image_metadata_intensive_quadrats_v3",
-                                       filenames = names_meta_rv) 
-
-
-
 ## ---------------------------------- ##
-## PREPROCESS DATA 
+## DOWNLOAD AND PREPROCESS DATA 
 ## ---------------------------------- ##
 
 ## lemming blocks
 lb_processed <- c()
 
-for (i in 1:length(classification_lb_list)) {
-  lb_processed[[i]] <- preprocess_classifications(dat_name = classification_lb_list[[i]], meta_name = metadata_lb_list[[i]], is.dir = FALSE)
+for (i in 1:length(names_class_lb)) {
+  
+  ## download image classification and metadata
+  classification_dat <- download_coat_data(name = "v_rodents_cameratraps_image_classification_lemming_blocks_v5",
+                                           filenames = names_class_lb[i]) 
+  
+  meta_dat <- download_coat_data(name = "v_rodents_cameratraps_image_metadata_lemming_blocks_v5",
+                                 filenames = names_meta_lb[i])
+  
+  print(paste("downloaded", names_class_lb[i]))
+  
+  ## preprocess data
+  lb_processed[[i]] <- preprocess_classifications(dat_name = classification_dat[[1]], meta_name = meta_dat[[1]], is.dir = FALSE)  # keep only one image per trigger
   lb_processed[[i]] <- filter_bad_quality(data = lb_processed[[i]])  # set images with bad quality to NA
-  lb_processed[[i]]$t_year <- sub(".*_(\\d{4})\\.parquet$", "\\1", names_class_lb[i])  # add year
+  lb_processed[[i]]$t_year <- sub(".*_(\\d{4})\\.parquet$", "\\1", names_class_lb[i])  # add year 
 }
 
 ## ko 2024 -> 2 missing images -> all classes NA -> ok
 ## vj 2023 -> image with tow animals -> ok
 
-lb_dat <- add_cameras(lb_processed, max_year = 2024)  # add missing cameras
+## remove some objects to free memory
+rm(list = c("classification_dat", "meta_dat"))
+gc(reset = TRUE)
 
-lb_dat <- tidyr::fill(lb_dat, t_year, .direction = "down")  # fill NAs in t_year with value above
+## add missing cameras
+lb_dat <- add_cameras(lb_processed, max_year = 2025)  
+
+## fill NAs in t_year with value above
+lb_dat <- tidyr::fill(lb_dat, t_year, .direction = "down")
+
+## check if the years are correct (old year (2019, 2022) have been checked and fixed)
+temp <- lb_dat %>% group_by(sn_site, t_year) %>% 
+  slice_tail(n = 1) %>% 
+  mutate(check_year = year(t_date)) %>% 
+  filter(check_year != t_year) %>% 
+  select(sn_site, t_date, t_year, check_year) %>% 
+  print()
 
 ## fix some years
 lb_dat$t_year[lb_dat$sn_site == "ko_kj_sn_25" & lb_dat$t_date > "2018-07-05" & lb_dat$t_date < "2019-07-11"] <- "2019"
@@ -111,17 +119,33 @@ lb_dat$t_year[lb_dat$sn_site == "ko_ry_sn_6b" & lb_dat$t_date > "2021-07-10" & l
 ## river valleys
 rv_processed <- c()
 
-for (i in 1:length(classification_rv_list)) {
-  rv_processed[[i]] <- preprocess_classifications(dat_name = classification_rv_list[[i]], meta_name = metadata_rv_list[[i]], is.dir = FALSE)
+for (i in 1:length(names_class_rv)) {
+  
+  ## download image classification and metadata for river valleys
+  classification_dat <- download_coat_data(name = "v_rodents_cameratraps_image_classification_intensive_quadrats_v4",
+                                           filenames = names_class_rv[i]) 
+  
+  meta_dat <- download_coat_data(name = "v_rodents_cameratraps_image_metadata_intensive_quadrats_v4",
+                                 filenames = names_meta_rv[i]) 
+  
+  print(paste("downloaded", names_class_rv[i]))
+  
+  ## preprocess data
+  rv_processed[[i]] <- preprocess_classifications(dat_name = classification_dat[[1]], meta_name = meta_dat[[1]], is.dir = FALSE)  # keep only one image per trigger
   rv_processed[[i]] <- filter_bad_quality(data = rv_processed[[i]])  # set images with bad quality to NA
   rv_processed[[i]]$t_year <- sub(".*_(\\d{4})\\.parquet$", "\\1", names_class_rv[i])  # add year
 }
-
 ## ko 2022 -> needs checking because of one time lapse image with a mink -> is ok
 
-rv_dat <- add_cameras(rv_processed, max_year = 2024)  # add missing cameras
+## remove some objects to free memory
+rm(list = c("classification_dat", "meta_dat"))
+gc(reset = TRUE)
 
-rv_dat <- tidyr::fill(rv_dat, t_year, .direction = "down")  # fill NAs in t_year with value above
+## add missing cameras
+rv_dat <- add_cameras(rv_processed, max_year = 2025)  
+
+# fill NAs in t_year with value above
+rv_dat <- tidyr::fill(rv_dat, t_year, .direction = "down")  
 
 ## fix years in meadows
 rv_dat$t_year[rv_dat$sc_type_of_sites_ecological == "meadow" & is.na(rv_dat$v_image_name) & !month(rv_dat$t_date) %in% c(7,8)] <-
@@ -130,6 +154,13 @@ rv_dat$t_year[rv_dat$sc_type_of_sites_ecological == "meadow" & is.na(rv_dat$v_im
 rv_dat$t_year[rv_dat$sc_type_of_sites_ecological == "meadow" & is.na(rv_dat$v_image_name) & month(rv_dat$t_date) == 7 & day(rv_dat$t_date) < 8] <-
   as.numeric(rv_dat$t_year[rv_dat$sc_type_of_sites_ecological == "meadow" & is.na(rv_dat$v_image_name) & month(rv_dat$t_date) == 7 & day(rv_dat$t_date) < 8])+1 
 
+## check if the years are correct (old years have been checked (2023))
+temp <- rv_dat %>% group_by(sn_site, t_year) %>% 
+  slice_tail(n = 1) %>% 
+  mutate(check_year = year(t_date)) %>% 
+  filter(check_year != t_year) %>% 
+  select(sn_site, t_date, t_year, check_year) %>% 
+  print()
 
 ## combine both files
 dat_all <- rbind(lb_dat, rv_dat)
@@ -148,7 +179,11 @@ for (i in 1:length(years)) {
   dat_year <- filter(dat_all, t_year == years[i])
   
   ## calculate number of passings per week
+  
+  remove_images <- dat_year %>% filter(v_trigger_mode == "motion_sensor", v_class_id == "bad_quality", v_presence == 1) # get motion sensor images with bad quality -> they will be removed
+  
   dat_week <- dat_year %>% mutate(t_date = ymd(t_date)) %>% 
+    filter(!v_image_name %in% remove_images$v_image_name) %>% 
     filter(!is.na(t_date)) %>% 
     mutate(t_week = week(ymd(t_date)), t_year = year(t_date)) %>% 
     mutate(t_year_week = paste(t_year, t_week, sep = "_")) %>% 
