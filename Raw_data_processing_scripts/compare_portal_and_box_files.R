@@ -15,7 +15,7 @@ library(tibble)
 portal_dir <- "portal_files_for_comparison/version3"
 
 ## Replace this with your actual Box directory
-box_dir <- "/Users/user/Library/CloudStorage/Box-Box/COAT/Modules/Small rodent module/data/V_snowbed_shrub_abundance_intensive/corrected files to data portal"
+box_dir <- "/Users/ssa195/Library/CloudStorage/Box-Box/COAT/Modules/Small rodent module/data/V_snowbed_shrub_abundance_intensive/corrected files to data portal"
 results_dir <- "comparison results/version3"
 
 dir.create(
@@ -117,9 +117,12 @@ compare_file <- function(filename) {
   box_sorted <- box_data %>%
     arrange(across(everything()))
   
-  same_data <- identical(
-    portal_sorted,
-    box_sorted
+  same_data <- isTRUE(
+    all.equal(
+      portal_sorted,
+      box_sorted,
+      check.attributes = FALSE
+    )
   )
   ## Find complete rows present only in each source
   ##
@@ -146,6 +149,18 @@ compare_file <- function(filename) {
   message("Same data: ", same_data)
   message("Rows only in portal: ", nrow(portal_only))
   message("Rows only in Box: ", nrow(box_only))
+  
+  ## Show the reason if the comparison still fails
+  if (!same_data) {
+    message("\nExplanation from all.equal():")
+    print(
+      all.equal(
+        portal_sorted,
+        box_sorted,
+        check.attributes = FALSE
+      )
+    )
+  }
   
   
   ## Print exact unmatched rows to the R console
