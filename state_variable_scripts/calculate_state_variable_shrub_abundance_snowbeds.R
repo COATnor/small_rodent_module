@@ -64,7 +64,7 @@ state_var_names <- c()
 for (i in 1:length(years)) {
   
   ## correct year in data from 2024
-  if (years[i] == 2024) dat_list[[i]]$t_year <- 2024
+  #if (years[i] == 2024) dat_list[[i]]$t_year <- 2024
   
   ## correct bet_nan nd vac_vit (inverted) in data from 2022 and 2024
   # if (years[i] %in% c(2022, 2024)) {
