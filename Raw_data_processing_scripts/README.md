@@ -83,10 +83,13 @@ comparison results/
 
 | Date checked | Years | Result | Issue |
 |---|---|---|---|
-| | | | |
+| 2026-10-22 | 2011, 2022, 2024 | All files matched corrected Box files for portal version 2; no differences found | None |
+| 2026-10-22 | 2011, 2022, 2024, 2025 | All files matched corrected Box files for portal version 3; no differences found | None |
 
 ### Credits
 
 The download functions are sourced from
 <https://github.com/COATnor/data_management_scripts/blob/master/download_data_from_coat_data_portal.R>,
 originally written by Hanna Böhner.
+The portal download and comparison workflow in this repository was written
+by Suaiba Amina Salahuddin.
