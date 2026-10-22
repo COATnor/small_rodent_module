@@ -74,7 +74,7 @@ filenames <- paste0(
 )
 
 ## Files are downloaded locally but are not committed to GitHub.
-portal_dir <- "portal files for comparison"
+portal_dir <- "portal_files_for_comparison"
 
 dir.create(
   portal_dir,
@@ -94,4 +94,4 @@ download_coat_data(
   out.dir = portal_dir
 )
 
-message("Portal files downloaded to: ", portal_dir)
+message("Portal files downloaded to: ", normalizePath(portal_dir))
