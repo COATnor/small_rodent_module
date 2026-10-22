@@ -61,7 +61,7 @@ if (!(
   )
 }
 
-dataset_name <- "v_snowbed_shrub_abundance_intensive_v3"
+dataset_name <- "v_snowbed_shrub_abundance_intensive_v2"
 
 ## Select only the year or years being checked.
 ## Add further years when needed.
@@ -74,7 +74,7 @@ filenames <- paste0(
 )
 
 ## Files are downloaded locally but are not committed to GitHub.
-portal_dir <- "portal_files_for_comparison"
+portal_dir <- "portal_files_for_comparison/version2"
 
 dir.create(
   portal_dir,
