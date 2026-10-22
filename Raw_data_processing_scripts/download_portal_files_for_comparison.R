@@ -61,7 +61,7 @@ if (!(
   )
 }
 
-dataset_name <- "v_snowbed_shrub_abundance_intensive_v6"
+dataset_name <- "v_snowbed_shrub_abundance_intensive_v3"
 
 ## Initially select only the year being checked.
 ## Add further years when needed.
