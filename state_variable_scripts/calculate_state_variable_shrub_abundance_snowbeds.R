@@ -9,7 +9,7 @@
 
 ## the script downloads the camera trapping and snap trapping datasets from the COAT dataportal
 ## preprocesses the data to keep only one motion sensor image per trigger
-## calculates abundance of lemming as logarithm of number of passings per week (camera traps) or logarithm of number of caught lemmings per trapping event
+## calculates dwarf shrub abundance in snowbed habitats within the COAT Varanger intensive design.
 ## creates a new version of the state variable
 ## uploads the state variable to the COAT dataportal
 
