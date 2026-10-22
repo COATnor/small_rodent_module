@@ -67,13 +67,13 @@ for (i in 1:length(years)) {
   if (years[i] == 2024) dat_list[[i]]$t_year <- 2024
   
   ## correct bet_nan nd vac_vit (inverted) in data from 2022 and 2024
-  if (years[i] %in% c(2022, 2024)) {
-    dat_list[[i]]$v_species[dat_list[[i]]$v_species == "bet_nan" & dat_list[[i]]$sn_locality == "komagdalen"] <- "vac_vit_new"
-    dat_list[[i]]$v_species[dat_list[[i]]$v_species == "vac_vit" & dat_list[[i]]$sn_locality == "komagdalen"] <- "bet_nan_new"
-    
-    dat_list[[i]]$v_species[dat_list[[i]]$v_species == "vac_vit_new" & dat_list[[i]]$sn_locality == "komagdalen"] <- "vac_vit"
-    dat_list[[i]]$v_species[dat_list[[i]]$v_species == "bet_nan_new" & dat_list[[i]]$sn_locality == "komagdalen"] <- "bet_nan"
-  }
+  # if (years[i] %in% c(2022, 2024)) {
+  #   dat_list[[i]]$v_species[dat_list[[i]]$v_species == "bet_nan" & dat_list[[i]]$sn_locality == "komagdalen"] <- "vac_vit_new"
+  #   dat_list[[i]]$v_species[dat_list[[i]]$v_species == "vac_vit" & dat_list[[i]]$sn_locality == "komagdalen"] <- "bet_nan_new"
+  #   
+  #   dat_list[[i]]$v_species[dat_list[[i]]$v_species == "vac_vit_new" & dat_list[[i]]$sn_locality == "komagdalen"] <- "vac_vit"
+  #   dat_list[[i]]$v_species[dat_list[[i]]$v_species == "bet_nan_new" & dat_list[[i]]$sn_locality == "komagdalen"] <- "bet_nan"
+  # }
   
   
   dat_new <- dat_list[[i]] %>% group_by(sn_region, sn_locality, sn_section, sn_site, sn_plot, sc_plot_treatment, t_year, v_species) %>% 
