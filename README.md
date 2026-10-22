@@ -26,6 +26,7 @@ The repository will be expanded gradually as additional workflows and folders ar
 ├── LICENSE
 ├── README.md
 └── small_rodent_module.Rproj
+```
 
 ## `Raw_data_processing_scripts/`
 
