@@ -15,7 +15,7 @@ library(tibble)
 portal_dir <- "portal_files_for_comparison/version3"
 
 ## Replace this with your actual Box directory
-box_dir <- '/Users/ssa195/Library/CloudStorage/Box-Box/COAT/Modules/Small rodent module/data/V_snowbed_shrub_abundance_intensive/corrected files to data portal'
+box_dir <- "/Users/user/Library/CloudStorage/Box-Box/COAT/Modules/Small rodent module/data/V_snowbed_shrub_abundance_intensive/corrected files to data portal"
 results_dir <- "comparison results/version3"
 
 dir.create(
@@ -37,6 +37,10 @@ read_coat_file <- function(path) {
     file = path,
     delim = ";",
     na = "NA",
+    col_types = readr::cols(
+      .default = readr::col_character()
+    ),
+    trim_ws = FALSE,
     show_col_types = FALSE
   )
 }
@@ -117,77 +121,190 @@ compare_file <- function(filename) {
     portal_sorted,
     box_sorted
   )
+  ## Find complete rows present only in each source
+  ##
+  ## portal_only:
+  ## rows present in the portal file but not in the Box file
+  ##
+  ## box_only:
+  ## rows present in the Box file but not in the portal file
+  portal_only <- anti_join(
+    portal_data,
+    box_data,
+    by = names(portal_data)
+  )
   
-  ## If different, save rows only found in each source
-  if (!same_data) {
+  box_only <- anti_join(
+    box_data,
+    portal_data,
+    by = names(portal_data)
+  )
+  
+  
+  ## Print comparison result
+  message("Same column names: ", same_columns)
+  message("Same data: ", same_data)
+  message("Rows only in portal: ", nrow(portal_only))
+  message("Rows only in Box: ", nrow(box_only))
+  
+  
+  ## Print exact unmatched rows to the R console
+  if (nrow(portal_only) > 0) {
     
-    portal_only <- anti_join(
-      portal_data,
-      box_data,
-      by = names(portal_data)
-    )
+    message("\nEntries only in the COAT Portal file:")
+    print(portal_only, n = Inf)
     
-    box_only <- anti_join(
-      box_data,
-      portal_data,
-      by = names(portal_data)
-    )
+  } else {
     
-    write_csv(
-      portal_only,
-      file.path(
-        results_dir,
-        paste0(filename, "_portal_only.csv")
-      )
-    )
-    
-    write_csv(
-      box_only,
-      file.path(
-        results_dir,
-        paste0(filename, "_box_only.csv")
-      )
-    )
+    message("\nNo entries occur only in the COAT Portal file.")
   }
   
+  
+  if (nrow(box_only) > 0) {
+    
+    message("\nEntries only in the Box file:")
+    print(box_only, n = Inf)
+    
+  } else {
+    
+    message("\nNo entries occur only in the Box file.")
+  }
+  
+  
+  ## Create a clean filename for output files
+  file_stem <- tools::file_path_sans_ext(filename)
+  
+  
+  ## Save portal-only rows
+  write_csv(
+    portal_only,
+    file.path(
+      results_dir,
+      paste0(file_stem, "_portal_only.csv")
+    )
+  )
+  
+  
+  ## Save Box-only rows
+  write_csv(
+    box_only,
+    file.path(
+      results_dir,
+      paste0(file_stem, "_box_only.csv")
+    )
+  )
+  
+  
+  ## Save a readable text report
+  report_file <- file.path(
+    results_dir,
+    paste0(file_stem, "_differences.txt")
+  )
+  
+  report <- capture.output({
+    
+    cat("Comparison for: ", filename, "\n\n", sep = "")
+    
+    cat("Portal file:\n")
+    cat(normalizePath(portal_file, mustWork = FALSE), "\n\n")
+    
+    cat("Box file:\n")
+    cat(normalizePath(box_file, mustWork = FALSE), "\n\n")
+    
+    cat("Portal rows: ", nrow(portal_data), "\n", sep = "")
+    cat("Box rows: ", nrow(box_data), "\n", sep = "")
+    cat("Same columns: ", same_columns, "\n", sep = "")
+    cat("Same data: ", same_data, "\n\n", sep = "")
+    
+    cat(
+      "Rows only in the COAT Portal file: ",
+      nrow(portal_only),
+      "\n\n",
+      sep = ""
+    )
+    
+    if (nrow(portal_only) > 0) {
+      print(portal_only, n = Inf)
+    } else {
+      cat("None\n")
+    }
+    
+    cat(
+      "\nRows only in the Box file: ",
+      nrow(box_only),
+      "\n\n",
+      sep = ""
+    )
+    
+    if (nrow(box_only) > 0) {
+      print(box_only, n = Inf)
+    } else {
+      cat("None\n")
+    }
+  })
+  
+  writeLines(
+    report,
+    con = report_file
+  )
+  
+  
+  ## Return one summary row
   tibble(
     filename = filename,
-    status = ifelse(same_data, "match", "different"),
+    status = ifelse(
+      same_data,
+      "match",
+      "different"
+    ),
     portal_rows = nrow(portal_data),
     box_rows = nrow(box_data),
     same_columns = same_columns,
     same_data = same_data,
-    portal_only_rows = ifelse(
-      same_data,
-      0,
-      nrow(anti_join(
-        portal_data,
-        box_data,
-        by = names(portal_data)
-      ))
-    ),
-    box_only_rows = ifelse(
-      same_data,
-      0,
-      nrow(anti_join(
-        box_data,
-        portal_data,
-        by = names(portal_data)
-      ))
-    )
+    portal_only_rows = nrow(portal_only),
+    box_only_rows = nrow(box_only)
   )
 }
 
+
+## ---------------------------------- ##
+## RUN COMPARISON FOR ALL FILES
+## ---------------------------------- ##
+
 comparison <- bind_rows(
-  lapply(filenames, compare_file)
+  lapply(
+    filenames,
+    compare_file
+  )
+)
+
+
+## ---------------------------------- ##
+## SAVE SUMMARY
+## ---------------------------------- ##
+
+summary_file <- file.path(
+  results_dir,
+  "portal_box_comparison.csv"
 )
 
 write_csv(
   comparison,
-  file.path(
-    results_dir,
-    "portal_box_comparison.csv"
-  )
+  summary_file
 )
 
+
+## ---------------------------------- ##
+## PRINT SUMMARY
+## ---------------------------------- ##
+
+message("\n========================================")
+message("Comparison completed")
+message("========================================")
+
 print(comparison)
+
+message(
+  "\nSummary saved to:\n",
+  normalizePath(summary_file, mustWork = FALSE)
+)
