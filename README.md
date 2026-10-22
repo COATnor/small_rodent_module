@@ -20,6 +20,10 @@ The repository will be expanded gradually as additional workflows and folders ar
 ```text
 .
 ├── Raw_data_processing_scripts/
+│   ├── 01_edit_raw_data_shrubs_in_snowbeds_COAT.R
+│   ├── correct_annual_files.R
+│   ├── download_portal_files_for_comparison.R
+│   └── compare_portal_and_box_files.R
 ├── data_preprocessing_scripts/
 ├── state_variable_scripts/
 ├── .gitignore
@@ -53,7 +57,9 @@ The workflow prepares raw field data before it is uploaded to the COAT data port
 | Script | Purpose |
 |---|---|
 | `Raw_data_processing_scripts/01_edit_raw_data_shrubs_in_snowbeds_COAT.R` | Yearly workflow. Reads raw field files, runs checks, reformats to COAT variable names, reshapes to long format and writes the portal file |
-| `Raw_data_processing_scripts/correct_annual_files.R` | One-off fixes to files that have already been prepared for the portal |
+| `Raw_data_processing_scripts/correct_annual_files.R` | One-off fixes to raw data files that have already been prepared for the portal |
+| `Raw_data_processing_scripts/download_portal_files_for_comparison.R` | Downloads selected files from the COAT data portal for comparison |
+| `Raw_data_processing_scripts/compare_portal_and_box_files.R` | Compares the downloaded portal files with the corrected files stored in Box |
 
 ## `01_edit_raw_data_shrubs_in_snowbeds_COAT.R`
 
@@ -78,7 +84,7 @@ Species columns: `emp_nig`, `vac_myr`, `vac_uli`, `bet_nan`, `vac_vit`, `phy_cae
 
 ## `correct_annual_files.R`
 
-Reads the files already prepared for the portal and writes corrected versions to `corrected files to data portal/`.
+Reads the raw data files already prepared for the portal and writes corrected versions to `corrected files to data portal/`.
 
 | Year | Correction |
 |---|---|
@@ -86,6 +92,13 @@ Reads the files already prepared for the portal and writes corrected versions to
 | 2022 | Presence values swapped between `bet_nan` and `vac_vit` in Komagdalen |
 | 2024 | Same swap in Komagdalen; wrong `t_year` values (9, 10, 11) set to 2024; dates converted from `dd.mm.yyyy` to `yyyy-mm-dd` |
 | 2025 | Wrong `t_year` values (1, 2, 10, 11, 12, 31) set to 2025; dates converted to `yyyy-mm-dd` |
+
+### Checking that corrected files are on the portal
+
+If it is unclear whether the corrected or the old version of a file is on the COAT data portal, the portal file can be downloaded and compared with the corrected file in Box. This is a check only and does not change anything on the portal.
+
+See [`Raw_data_processing_scripts/README.md`](Raw_data_processing_scripts/README.md) for instructions. Results can be logged in GitHub Issues.
+
 ## Yearly routine (checklist)
 
 We can use something like this to do a check for new data collected and to be added to the COAT data portal. We can perhaps copy these points into an issue for each new field season and tick them off when addressed. This checklist can be adapted as needed!
