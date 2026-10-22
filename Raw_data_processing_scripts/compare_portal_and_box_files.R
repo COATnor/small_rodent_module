@@ -15,7 +15,7 @@ library(tibble)
 portal_dir <- "portal files for comparison/version2"
 
 ## Replace this with your actual Box directory
-box_dir <- '/Users/ssa195/Library/CloudStorage/Box-Box/COAT/Modules/Small rodent module/data/V_snowbed_shrub_abundance_intensive/corrected files to data portal'
+box_dir <- '/Users/yourname/Library/CloudStorage/Box-Box/COAT/Small rodent module/corrected files to data portal
 
 results_dir <- "comparison results/version2"
 
