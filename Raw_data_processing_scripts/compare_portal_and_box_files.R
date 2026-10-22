@@ -12,12 +12,12 @@ library(readr)
 library(dplyr)
 library(tibble)
 
-portal_dir <- "portal files for comparison"
+portal_dir <- "portal files for comparison/version2"
 
 ## Replace this with your actual Box directory
-box_dir <- "/Users/yourname/Library/CloudStorage/Box-Box/COAT/Small rodent module/corrected files to data portal"
+box_dir <- '/Users/ssa195/Library/CloudStorage/Box-Box/COAT/Modules/Small rodent module/data/V_snowbed_shrub_abundance_intensive/corrected files to data portal'
 
-results_dir <- "comparison results"
+results_dir <- "comparison results/version2"
 
 dir.create(
   results_dir,
@@ -25,7 +25,7 @@ dir.create(
   showWarnings = FALSE
 )
 
-years <- 2025
+years <- c(2011, 2022, 2024)
 
 filenames <- paste0(
   "V_snowbed_shrub_abundance_intensive_",
