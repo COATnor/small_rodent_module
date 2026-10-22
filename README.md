@@ -13,7 +13,7 @@ The repository is used for:
 
 The repository will be expanded gradually as additional workflows and folders are documented.
 
-> Raw and processed data are stored in Box or other approved storage locations, not in this repository! Only code, documentation and other version-controlled project files should be committed to Git.
+> Raw and processed data are stored in Box or the COAT data portal, not in this repository! Only code, documentation and other version-controlled project files should be committed to Git.
 
 ## Repository structure
 
