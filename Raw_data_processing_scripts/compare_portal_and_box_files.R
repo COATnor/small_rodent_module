@@ -12,7 +12,7 @@ library(readr)
 library(dplyr)
 library(tibble)
 
-portal_dir <- "portal files for comparison/version2"
+portal_dir <- "portal_files_for_comparison/version2"
 
 ## Replace this with your actual Box directory
 box_dir <- "/Users/yourname/Library/CloudStorage/Box-Box/COAT/Small rodent module/corrected files to data portal"
