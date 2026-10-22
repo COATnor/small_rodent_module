@@ -63,9 +63,9 @@ if (!(
 
 dataset_name <- "v_snowbed_shrub_abundance_intensive_v3"
 
-## Initially select only the year being checked.
+## Select only the year or years being checked.
 ## Add further years when needed.
-years <- 2025
+years <- c(2011, 2022, 2024, 2025)
 
 filenames <- paste0(
   "V_snowbed_shrub_abundance_intensive_",
