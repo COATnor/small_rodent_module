@@ -27,15 +27,15 @@ The repository will be expanded gradually as additional workflows and folders ar
 ├── README.md
 └── small_rodent_module.Rproj
 
-### `Raw_data_processing_scripts/`
+## `Raw_data_processing_scripts/`
 
 This folder contains scripts for processing raw field data. The scripts may include checks, corrections, formatting and preparation of files before they are uploaded to the COAT data portal.
 
-### `data_preprocessing_scripts/`
+## `data_preprocessing_scripts/`
 
 This folder contains scripts for preprocessing data before further analyses or calculation of state variables.
 
-### `state_variable_scripts/`
+## `state_variable_scripts/`
 
 This folder contains scripts for calculating state variables and other derived measures for the small rodent module.
 
@@ -47,14 +47,14 @@ The `Raw_data_processing_scripts/` folder contains preprocessing code for the **
 
 The workflow prepares raw field data before it is uploaded to the COAT data portal.
 
-### Scripts
+## Scripts
 
 | Script | Purpose |
 |---|---|
 | `Raw_data_processing_scripts/01_edit_raw_data_shrubs_in_snowbeds_COAT.R` | Yearly workflow. Reads raw field files, runs checks, reformats to COAT variable names, reshapes to long format and writes the portal file |
 | `Raw_data_processing_scripts/correct_annual_files.R` | One-off fixes to files that have already been prepared for the portal |
 
-### `01_edit_raw_data_shrubs_in_snowbeds_COAT.R`
+## `01_edit_raw_data_shrubs_in_snowbeds_COAT.R`
 
 Based on Eeva's 2017 template (`Template snowbed vegetation data.xlsx`). Last updated by Eeva 17.10.2023.
 
@@ -75,7 +75,7 @@ Checks in the script:
 
 Species columns: `emp_nig`, `vac_myr`, `vac_uli`, `bet_nan`, `vac_vit`, `phy_cae`, `nar_str`, `hup_sel`, `sal_her`.
 
-### `correct_annual_files.R`
+## `correct_annual_files.R`
 
 Reads the files already prepared for the portal and writes corrected versions to `corrected files to data portal/`.
 
@@ -109,7 +109,7 @@ This repository is also the project log. It tracks:
 - open issues
 - decisions about data processing and corrections
 
-### Issues
+## Issues
 
 Use GitHub Issues for:
 
@@ -121,7 +121,7 @@ Use GitHub Issues for:
 - corrections to existing data
 - metadata updates
 
-### Commits
+## Commits
 
 Write short commit messages that describe what changed. For example:
 
