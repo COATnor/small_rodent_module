@@ -3,3 +3,15 @@
 .RData
 .Ruserdata
 
+# Credentials and local configuration
+.Renviron
+.env
+*.key
+*.token
+
+# macOS
+.DS_Store
+
+# Downloaded portal files and comparison results
+portal_files_for_comparison/*
+comparison_results/*
