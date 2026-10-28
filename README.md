@@ -62,6 +62,7 @@ The workflow prepares raw field data before it is uploaded to the COAT data port
 | `Raw_data_processing_scripts/compare_portal_and_box_files.R` | Compares the downloaded portal files with the corrected files stored in Box |
 
 ## `01_edit_raw_data_shrubs_in_snowbeds_COAT.R`
+Based on Eeva's 2017 template (`Template snowbed vegetation data.xlsx`). Last updated by Eeva 17.10.2023.
 
 ### Raw data format
 
@@ -69,7 +70,7 @@ The script reads the raw field files as **tab-delimited text (`.txt`)**. Please 
 
 If the data have been saved as `.csv` or `.xlsx`, **convert them to tab-delimited `.txt` before running the script**!
 
-Based on Eeva's 2017 template (`Template snowbed vegetation data.xlsx`). Last updated by Eeva 17.10.2023.
+### Steps to run script
 
 1. Set `data.dir` (raw files) and `out.dir` (files for the portal).
 2. Set `filename` to the Vestre Jakobselv (`_VJ_`) file, then run the checks. Repeat for Komagdalen (`_KO_`). **The two localities are checked separately.**
