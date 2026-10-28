@@ -5,7 +5,7 @@
 #### ------------------------------------------------------------------------------------------------------------ ####
 
 
-## this script is used to calculate the state variable V33_rodents_norwegian_lemming_abundance_intensive
+## this script is used to calculate the state variable V85_snowbed_dwarf_shrub_abundance_intensive
 
 ## the script downloads the camera trapping and snap trapping datasets from the COAT dataportal
 ## preprocesses the data to keep only one motion sensor image per trigger
