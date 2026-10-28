@@ -21,10 +21,10 @@ objects()
 ################################# set working directories
 
 # data.dir = where the data to be checked are  
-data.dir <- "raw data from field/" 
+data.dir <- "/Users//Library/CloudStorage/Box-Box/COAT/Modules/Small rodent module/data/V_snowbed_shrub_abundance_intensive/raw data from field/" 
 
 # out.dir = where the cleaned files should be saved 
-out.dir <-"edited files to data portal/"  
+out.dir <-"/Users//Library/CloudStorage/Box-Box/COAT/Modules/Small rodent module/data/V_snowbed_shrub_abundance_intensive/edited files to data portal/"  
 
 ################################# get functions and libraries
 
