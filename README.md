@@ -63,6 +63,12 @@ The workflow prepares raw field data before it is uploaded to the COAT data port
 
 ## `01_edit_raw_data_shrubs_in_snowbeds_COAT.R`
 
+### Raw data format
+
+The script reads the raw field files as **tab-delimited text (`.txt`)**. Please save the raw field data in this format from the start, e.g. `snowbed_shrubs_VJ_2025.txt` and `snowbed_shrubs_KO_2025.txt`.
+
+If the data have been saved as `.csv` or `.xlsx`, **convert them to tab-delimited `.txt` before running the script**!
+
 Based on Eeva's 2017 template (`Template snowbed vegetation data.xlsx`). Last updated by Eeva 17.10.2023.
 
 1. Set `data.dir` (raw files) and `out.dir` (files for the portal).
