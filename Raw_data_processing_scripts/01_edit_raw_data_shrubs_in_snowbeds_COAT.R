@@ -42,7 +42,7 @@ library(tidyverse) # arrange, gather, spread, pivot_longer
 
 # write here the original file name 
 filename<-"snowbed_shrubs_VJ_2026.txt"
-#filename<-"snowbed_shrubs_KO_2025.txt"
+#filename<-"snowbed_shrubs_KO_2026.txt"
 
 # read in data
 myfile<-read.delim(paste(data.dir, filename, sep = ""), header=TRUE, sep="\t")
