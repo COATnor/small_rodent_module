@@ -41,7 +41,7 @@ library(tidyverse) # arrange, gather, spread, pivot_longer
 ################################# get data
 
 # write here the original file name 
-filename<-"snowbed_shrubs_VJ_2025.txt"
+filename<-"snowbed_shrubs_VJ_2026.txt"
 #filename<-"snowbed_shrubs_KO_2025.txt"
 
 # read in data
