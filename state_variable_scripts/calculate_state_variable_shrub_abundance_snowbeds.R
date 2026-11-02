@@ -99,7 +99,7 @@ for (i in 1:length(years)) {
 
 ## you can either create a new version of the state variable or add the data to a already existing state variable (then you can skip this part)
 
-## serach for your dataset
+## search for your dataset
 state_name <- "v85_snowbed_dwarf_shrub_abundance_intensive_v1" # write here the name including the version of the state variable you want to add data to
 state_version <- "1" # write here the version of the state variable
 
