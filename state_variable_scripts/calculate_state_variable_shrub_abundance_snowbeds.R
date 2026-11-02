@@ -100,16 +100,16 @@ for (i in 1:length(years)) {
 ## you can either create a new version of the state variable or add the data to a already existing state variable (then you can skip this part)
 
 ## search for your dataset
-state_name <- "v85_snowbed_dwarf_shrub_abundance_intensive_v1" # write here the name including the version of the state variable you want to add data to
-state_version <- "1" # write here the version of the state variable
+state_name <- "v85_snowbed_dwarf_shrub_abundance_intensive_v2" # write here the name including the version of the state variable you want to add data to
+state_version <- "2" # write here the version of the state variable
 
 pkg_state <- package_search(q = list(paste("name:", state_name, sep = "")), fq = list(paste("version:", state_version, sep = "")), include_private = TRUE, include_drafts = TRUE)$results[[1]] # search for the dataset and save the results
 pkg_state$name # check the name
 
 ## modify metadata of the state variable
-name_new <- "v85_snowbed_dwarf_shrub_abundance_intensive_v2" # write here the name of the new version (for example change v1 to v2)
-version_new <- "2" # write here the new version
-end_new <- "2024-07-31" # write here the (new) end date of the dataset
+name_new <- "v85_snowbed_dwarf_shrub_abundance_intensive_v3" # write here the name of the new version (for example change v1 to v2)
+version_new <- "3" # write here the new version
+end_new <- "2026-07-23" # write here the (new) end date of the dataset
 
 pkg_state$datasets # check with which dataset the current version of the state variable is associated
 datasets_new <- "v_snowbed_shrub_abundance_intensive_v6" # write here the name (inlcuding the version) of the dataset the should be associated with the new version of the state variable
