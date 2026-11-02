@@ -287,7 +287,7 @@ myfile_long <- add_column(myfile_long, t_year = substr(myfile_long$t_date, 1, 4)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 # write here the current year
-year<-2025
+year<-2026
 
 filename<-paste("V_snowbed_shrub_abundance_intensive", "_", year, ".txt", sep = "")
 write.table(myfile_long, paste(out.dir, filename, sep = ""), sep=";",row.names = F)
