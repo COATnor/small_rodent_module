@@ -11,20 +11,60 @@
 
 ## last update Eeva 17.10.2023
 
+#Instructions for running code added by Suaiba Amina Salahuddin on 02/11/2026:
+# The script must be run in sections in ONE R session.
+#
+# IMPORTANT:
+# Do NOT run the complete script from the beginning a second time when
+# loading the second site. In particular, do NOT run:
+#
+#     rm(list = ls())
+#
+# again, because this would delete the object saved from the first site.
+#
+# The intended order is:
+#
+#   SITE 1: VJ
+#     A. Run the setup section once
+#     B. Read the VJ file
+#     C. Check the VJ data
+#     D. Create myfile_vj
+#
+#   SITE 2: KO
+#     E. Read the KO file
+#     F. Check the KO data
+#     G. Create myfile_komag
+#
+#   COMBINE
+#     H. Combine myfile_komag and myfile_vj
+#     I. Reformat, reshape and export the combined data
+#
+# When changing from VJ to KO or vice versa, do not rerun:
+#   - rm(list = ls())
+#   - the setup section
+#   - library(tidyverse)
+#
+# The object myfile_vj must remain in memory while KO is read and checked and vice versa.
+
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 ################# start script  ----
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+################# Run setup once only ----
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
+# Run this section once, before the first site.
+# Do not run this section again when loading the second site.
 rm(list=ls())
 objects()
 
 ################################# set working directories
 
 # data.dir = where the data to be checked are  
-data.dir <- "/Users//Library/CloudStorage/Box-Box/COAT/Modules/Small rodent module/data/V_snowbed_shrub_abundance_intensive/raw data from field/" 
+data.dir <- "/Users/username/Library/CloudStorage/Box-Box/COAT/Modules/Small rodent module/data/V_snowbed_shrub_abundance_intensive/raw data from field/" 
 
 # out.dir = where the cleaned files should be saved 
-out.dir <-"/Users//Library/CloudStorage/Box-Box/COAT/Modules/Small rodent module/data/V_snowbed_shrub_abundance_intensive/edited files to data portal/"  
+out.dir <-"/Users/username/Library/CloudStorage/Box-Box/COAT/Modules/Small rodent module/data/V_snowbed_shrub_abundance_intensive/edited files to data portal/"  
 
 ################################# get functions and libraries
 
@@ -36,11 +76,21 @@ IsDate <- function(mydate, date.format = "%d.%m.%y") {
 }
 
 library(tidyverse) # arrange, gather, spread, pivot_longer
+# >>> SETUP FINISHED.
+# >>> Do not run this setup section again
 
-
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+################# Read and check site data ----
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# Chane and run the filename assignment and the read.delim() command below for site 1 first, either VJ or KO.
+# Then run all sections from "check column titles" through the end of
+# "check values in plant data" with line "table(myfile$sal_her)".
+# After checking and correcting site 1, scroll down to the
+# "combine files from KO and VJ" section and run ONLY the myfile_ block 
+#corresponding to the site (for e.g. myfile_vj is working on VJ site).
 ################################# get data
 
-# write here the original file name 
+# Write the original file name here
 filename<-"snowbed_shrubs_VJ_2026.txt"
 #filename<-"snowbed_shrubs_KO_2026.txt"
 
