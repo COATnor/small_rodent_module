@@ -15,3 +15,6 @@
 # Downloaded portal files and comparison results
 portal_files_for_comparison/*
 comparison results/*
+
+#The scripts to upload new data version to the COAT data portal
+upload_new_version_to_data_portal/*
