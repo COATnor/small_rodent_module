@@ -45,7 +45,7 @@ ckanr_setup(url = "https://data.coat.no",
             key = Sys.getenv("api_COAT")) 
 
 ## define years
-years <- 2009:2024
+years <- 2009:2026
 
 ## specify filenames
 filenames <- paste0("V_snowbed_shrub_abundance_intensive_", years, ".txt")
