@@ -164,8 +164,8 @@ package_create(
 ## The state variable has to be created on www.data.coat.no
 
 ## serach for your dataset
-state_name <- "v85_snowbed_dwarf_shrub_abundance_intensive_v2" # write here the name including the version of the state variable you want to add data to
-state_version <- "2" # write here the version of the state variable
+state_name <- "v85_snowbed_dwarf_shrub_abundance_intensive_v3" # write here the name including the version of the state variable you want to add data to
+state_version <- "3" # write here the version of the state variable
 
 pkg_state <- package_search(q = list(paste("name:", state_name, sep = "")), fq = list(paste("version:", state_version, sep = "")), include_private = TRUE, include_drafts = TRUE)$results[[1]] # search for the dataset and save the results
 filenames_state <- pkg_state$resources %>% sapply("[[", "name") # get the filenames
@@ -187,7 +187,7 @@ for (i in state_var_names) {
 ## UPDATE THE STATE VARIABLE
 ## ---------------------------------- ##
 
-## here you can update the metadata of the sate variable
+## here you can update the metadata of the state variable
 ## you can for example change the sate from 'draft' to 'active (this is necessary if you created the state variable on data.coat.no and then added the datafiles via R)
 ## you can also change the visibility from private to public
 
