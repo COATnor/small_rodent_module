@@ -113,7 +113,7 @@ end_new <- "2026-07-23" # write here the (new) end date of the dataset
 pkg_state$datasets # check with which dataset the current version of the state variable is associated
 datasets_new <- "v_snowbed_shrub_abundance_intensive_v4" # write here the name (inlcuding the version) of the dataset the should be associated with the new version of the state variable
 
-# These are the typlical modifications when creating a new version of a state variable before adding data of another year
+# These are the typical modifications when creating a new version of a state variable before adding data of another year
 # other modification can be made if necessary
 
 # modify tags (necessary to avoid a validation error)
