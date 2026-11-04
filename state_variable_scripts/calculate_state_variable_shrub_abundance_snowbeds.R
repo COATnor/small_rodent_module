@@ -15,8 +15,6 @@
 
 ## the development version of the ckanr package has to be installed (remotes::install_github("ropensci/ckanr"))
 
-
-
 ## ---------------------------------- ##
 ## SETUP
 ## ---------------------------------- ##
@@ -51,8 +49,9 @@ years <- 2009:2026
 filenames <- paste0("V_snowbed_shrub_abundance_intensive_", years, ".txt")
 
 ## download data
-dat_list <- download_coat_data(name = "v_snowbed_shrub_abundance_intensive_v6",
-                                filenames = filenames)
+dat_list <- download_coat_data(name = "v_snowbed_shrub_abundance_intensive_v4",
+                                filenames = filenames,
+                               store = "session")
 
 
 ## ---------------------------------- ##
