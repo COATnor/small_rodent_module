@@ -15,6 +15,17 @@ The repository will be expanded gradually as additional workflows and folders ar
 
 > Raw and processed data are stored in Box or the COAT data portal, not in this repository! Only code, documentation and other version-controlled project files should be committed to Git.
 
+## COAT data portal
+
+Data and state variables from the module are published on the [COAT data portal](https://data.coat.no).
+
+| Type | Name | Link |
+|---|---|---|
+| Dataset | `V_snowbed_shrub_abundance_intensive` | [data.coat.no/dataset/v_snowbed_shrub_abundance_intensive](https://data.coat.no/dataset/v_snowbed_shrub_abundance_intensive) |
+| State variable | `V85_snowbed_dwarf_shrub_abundance_intensive` | [data.coat.no/state-variable/v85_snowbed_dwarf_shrub_abundance_intensive](https://data.coat.no/state-variable/v85_snowbed_dwarf_shrub_abundance_intensive) |
+
+The dataset page holds the raw-derived data files prepared with the scripts in `Raw_data_processing_scripts/`. The state variable page lists all existing versions of the state variable, which are calculated and uploaded with the scripts in `state_variable_scripts/`.
+
 ## Repository structure
 
 ```text
@@ -27,6 +38,7 @@ The repository will be expanded gradually as additional workflows and folders ar
 ├── data_preprocessing_scripts/
 ├── state_variable_scripts/
 ├── .gitignore
+├── CITATION.cff
 ├── LICENSE
 ├── README.md
 └── small_rodent_module.Rproj
@@ -43,6 +55,20 @@ This folder contains scripts for preprocessing data before further analyses or c
 ## `state_variable_scripts/`
 
 This folder contains scripts for calculating state variables and other derived measures for the small rodent module.
+
+The scripts in this folder:
+
+1. download the data they need from the COAT data portal
+2. calculate the state variable
+3. upload a new version of the state variable to the portal
+
+| Script | State variable | Portal page |
+|---|---|---|
+| `calculate_state_variable_shrub_abundance_snowbeds.R` | `V85_snowbed_dwarf_shrub_abundance_intensive` | [Existing versions](https://data.coat.no/state-variable/v85_snowbed_dwarf_shrub_abundance_intensive) |
+
+For example, `calculate_state_variable_shrub_abundance_snowbeds.R` downloads the `V_snowbed_shrub_abundance_intensive` dataset, calculates `V85_snowbed_dwarf_shrub_abundance_intensive` and uploads the result as a new version. All earlier versions remain available on the state variable page.
+
+Because each upload creates a new version, run these scripts only after the underlying dataset on the portal has been checked and updated (see the yearly routine below), and document the change in the relevant GitHub Issue.
 
 The documentation of the folders and workflows will be expanded gradually.
 
