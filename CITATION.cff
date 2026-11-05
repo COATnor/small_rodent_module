@@ -1,0 +1,41 @@
+cff-version: 1.2.0
+message: "If you use this code, please cite it as below. Data from the COAT data portal should be cited according to the citation and licence given for each dataset on the portal."
+title: "COAT small rodent module: code and documentation for data processing and state variables"
+abstract: >-
+  Code and documentation for the COAT (Climate-ecological Observatory for
+  Arctic Tundra) small rodent module. Includes scripts for preprocessing raw
+  field data, checking and formatting data before upload to the COAT data
+  portal, and calculating state variables.
+type: software
+authors:
+  - family-names: "Surname"
+    given-names: "Your Name"
+    affiliation: "Your institution"
+    # orcid: "https://orcid.org/0000-0000-0000-0000"
+version: 1.0.0
+date-released: "2026-11-05"
+license: MIT
+repository-code: "https://github.com/your-organisation/small_rodent_module"
+url: "https://data.coat.no"
+keywords:
+  - COAT
+  - small rodents
+  - snowbed
+  - dwarf shrubs
+  - state variables
+  - R
+references:
+  - type: dataset
+    title: "V_snowbed_shrub_abundance_intensive"
+    authors:
+      - name: "COAT (Climate-ecological Observatory for Arctic Tundra)"
+    publisher:
+      name: "COAT data portal"
+    url: "https://data.coat.no/dataset/v_snowbed_shrub_abundance_intensive"
+  - type: dataset
+    title: "V85_snowbed_dwarf_shrub_abundance_intensive"
+    authors:
+      - name: "COAT (Climate-ecological Observatory for Arctic Tundra)"
+    publisher:
+      name: "COAT data portal"
+    url: "https://data.coat.no/state-variable/v85_snowbed_dwarf_shrub_abundance_intensive"
