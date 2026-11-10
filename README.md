@@ -6,7 +6,7 @@ The repository is used for:
 
 - preprocessing raw field data
 - checking and formatting data before upload to the COAT data portal
-- calculating derived and state variables
+- calculating state variables derived from raw data
 - documenting workflows and decisions
 - logging changes to code and data
 - tracking tasks, responsibilities and open issues
