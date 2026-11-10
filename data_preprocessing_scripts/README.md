@@ -1,0 +1,1 @@
+This folder contains scripts that are used to post-process either datasets (from coat.no) or state variables. These scripts are used for various purposes. For example, script on small mammal images takes classified image datasets and filters them so that they are appropriate for plotting or modeling. 
