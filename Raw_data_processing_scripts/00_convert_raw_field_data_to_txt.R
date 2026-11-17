@@ -7,7 +7,7 @@
 #  1. Reads the file (for Excel workbooks it picks the sheet with "localities" in its name)
 #  2. Finds the site (VJ or KO) and the year (e.g. 2026) in the file name
 #  3. Cleans the table lightly (removes empty rows and empty unnamed columns,
-#     converts Excel date numbers to dd.mm.yyyy)
+#  converts dates to the year-first ISO format yyyy-mm-dd)
 #  4. Checks the column names against the expected ones
 #  5. Writes snowbed_shrubs_<site>_<year>.txt, e.g. snowbed_shrubs_VJ_2026.txt
 #
@@ -417,105 +417,135 @@ fix_dates <- function(df) {
     return(df)
   }
   
-  x <- as.character(df$date)
-  x <- trimws(x)
+  x <- trimws(as.character(df$date))
+  x[x == ""] <- NA_character_
   
-  # Excel serial dates, including values such as 46188 or 46188.0
+  # Convert Excel serial dates, for example 46112 or 46112.0.
   serial <- !is.na(x) &
     grepl("^[0-9]{4,6}(\\.0+)?$", x)
   
   if (any(serial)) {
     numeric_dates <- as.numeric(x[serial])
     
-    valid <- numeric_dates > 10000 & numeric_dates < 100000
+    valid <- numeric_dates > 10000 &
+      numeric_dates < 100000
     
     converted <- rep(NA_character_, length(numeric_dates))
+    
     converted[valid] <- format(
-      as.Date(numeric_dates[valid], origin = "1899-12-30"),
-      "%d.%m.%Y"
+      as.Date(
+        numeric_dates[valid],
+        origin = "1899-12-30"
+      ),
+      "%Y-%m-%d"
     )
     
     x[serial] <- converted
     
-    message(sum(serial & !is.na(x)), " Excel date value(s) converted")
+    message(
+      sum(valid),
+      " Excel date value(s) converted to YYYY-MM-DD"
+    )
   }
   
-  # ISO dates: 2026-07-15 or 2026-07-15 00:00:00
+  # Keep ISO dates in year-first format.
+  # Examples:
+  #   2026-07-09
+  #   2026-07-09 00:00:00
   iso <- !is.na(x) &
-    grepl("^[0-9]{4}-[0-9]{2}-[0-9]{2}", x)
+    grepl(
+      "^[0-9]{4}-[0-9]{2}-[0-9]{2}",
+      x
+    )
   
   if (any(iso)) {
-    converted <- as.Date(substr(x[iso], 1, 10), format = "%Y-%m-%d")
-    x[iso] <- format(converted, "%d.%m.%Y")
-    message(sum(iso), " ISO date(s) converted")
+    converted <- as.Date(
+      substr(x[iso], 1, 10),
+      format = "%Y-%m-%d"
+    )
+    
+    x[iso] <- format(
+      converted,
+      "%Y-%m-%d"
+    )
+    
+    message(
+      sum(!is.na(converted)),
+      " ISO date value(s) retained as YYYY-MM-DD"
+    )
   }
   
-  # Dates using slash separators, e.g. 15/07/2026
+  # Convert European dates such as 09.07.2026.
+  dot <- !is.na(x) &
+    grepl(
+      "^[0-9]{1,2}\\.[0-9]{1,2}\\.[0-9]{4}$",
+      x
+    )
+  
+  if (any(dot)) {
+    converted <- as.Date(
+      x[dot],
+      format = "%d.%m.%Y"
+    )
+    
+    x[dot] <- format(
+      converted,
+      "%Y-%m-%d"
+    )
+    
+    message(
+      sum(!is.na(converted)),
+      " dot-format date value(s) converted to YYYY-MM-DD"
+    )
+  }
+  
+  # Convert dates such as 09/07/2026.
   slash <- !is.na(x) &
-    grepl("^[0-9]{1,2}/[0-9]{1,2}/[0-9]{4}$", x)
+    grepl(
+      "^[0-9]{1,2}/[0-9]{1,2}/[0-9]{4}$",
+      x
+    )
   
   if (any(slash)) {
-    converted <- as.Date(x[slash], format = "%d/%m/%Y")
-    x[slash] <- format(converted, "%d.%m.%Y")
-    message(sum(slash), " slash-format date(s) converted")
+    converted <- as.Date(
+      x[slash],
+      format = "%d/%m/%Y"
+    )
+    
+    x[slash] <- format(
+      converted,
+      "%Y-%m-%d"
+    )
+    
+    message(
+      sum(!is.na(converted)),
+      " slash-format date value(s) converted to YYYY-MM-DD"
+    )
   }
   
-  # Warn about remaining non-empty values that are not dd.mm.yyyy
+  # Check that remaining non-empty values use YYYY-MM-DD.
   valid_format <- is.na(x) |
-    grepl("^[0-9]{2}\\.[0-9]{2}\\.[0-9]{4}$", x)
+    grepl(
+      "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+      x
+    )
   
   invalid <- !valid_format
   
   if (any(invalid)) {
     warning(
       sum(invalid),
-      " date value(s) are not in dd.mm.yyyy format. Examples: ",
-      paste(head(unique(x[invalid]), 5), collapse = ", "),
+      " date value(s) are not in YYYY-MM-DD format. Examples: ",
+      paste(
+        head(unique(x[invalid]), 5),
+        collapse = ", "
+      ),
       call. = FALSE
     )
   }
   
   df$date <- x
   df
-}
-
-check_columns <- function(df) {
-  actual <- names(df)
-  
-  missing <- setdiff(expected_titles, actual)
-  extra <- setdiff(actual, expected_titles)
-  
-  if (length(missing) > 0) {
-    warning(
-      "Missing expected columns: ",
-      paste(missing, collapse = ", "),
-      call. = FALSE
-    )
-  }
-  
-  if (length(extra) > 0) {
-    warning(
-      "Unexpected columns: ",
-      paste(extra, collapse = ", "),
-      call. = FALSE
-    )
-  }
-  
-  if (length(missing) == 0 &&
-      length(extra) == 0 &&
-      !identical(actual, expected_titles)) {
-    warning(
-      "All expected columns are present, but their order differs from script 01.",
-      call. = FALSE
-    )
-  }
-  
-  if (identical(actual, expected_titles)) {
-    message("Column names match the expected names.")
-    return(TRUE)
-  }
-  
-  FALSE
 }
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
