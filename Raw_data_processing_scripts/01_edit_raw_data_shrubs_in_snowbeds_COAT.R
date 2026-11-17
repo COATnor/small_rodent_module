@@ -82,7 +82,7 @@ library(tidyverse) # arrange, gather, spread, pivot_longer
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 ################# Read and check site data ----
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
-# Chane and run the filename assignment and the read.delim() command below for site 1 first, either VJ or KO.
+# Change and run the filename assignment and the read.delim() command below for site 1 first, either VJ or KO.
 # Then run all sections from "check column titles" through the end of
 # "check values in plant data" with line "table(myfile$sal_her)".
 # After checking and correcting site 1, scroll down to the
@@ -91,8 +91,8 @@ library(tidyverse) # arrange, gather, spread, pivot_longer
 ################################# get data
 
 # Write the original file name here
-filename<-"snowbed_shrubs_VJ_2026.txt"
-#filename<-"snowbed_shrubs_KO_2026.txt"
+#filename<-"snowbed_shrubs_VJ_2026.txt"
+filename<-"snowbed_shrubs_KO_2026.txt"
 
 # read in data
 myfile<-read.delim(paste(data.dir, filename, sep = ""), header=TRUE, sep="\t")
