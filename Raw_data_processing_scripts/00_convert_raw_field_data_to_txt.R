@@ -548,6 +548,48 @@ fix_dates <- function(df) {
   df
 }
 
+check_columns <- function(df) {
+  actual <- names(df)
+  
+  missing <- setdiff(expected_titles, actual)
+  extra <- setdiff(actual, expected_titles)
+  
+  if (length(missing) > 0) {
+    warning(
+      "Missing expected columns: ",
+      paste(missing, collapse = ", "),
+      call. = FALSE
+    )
+  }
+  
+  if (length(extra) > 0) {
+    warning(
+      "Unexpected columns: ",
+      paste(extra, collapse = ", "),
+      call. = FALSE
+    )
+  }
+  
+  if (
+    length(missing) == 0 &&
+    length(extra) == 0 &&
+    !identical(actual, expected_titles)
+  ) {
+    warning(
+      "All expected columns are present, but their order differs from ",
+      "the order expected by script 01.",
+      call. = FALSE
+    )
+  }
+  
+  if (identical(actual, expected_titles)) {
+    message("Column names match the expected names.")
+    return(TRUE)
+  }
+  
+  FALSE
+}
+
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 ################# File discovery  ----
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
