@@ -186,6 +186,3 @@ The commit history and GitHub Issues together provide a record of who did what a
 
 Before making a data-related change, document the original file name and the reason for the change in the relevant GitHub Issue.
 
-## Open tasks
-
-- [ ] Update portal metadata according to the corrected files
