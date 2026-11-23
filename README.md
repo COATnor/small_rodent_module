@@ -30,12 +30,12 @@ The dataset page holds the raw-derived data files prepared with the scripts in `
 
 ```text
 .
-├── Raw_data_processing_scripts/
+├── raw_data_processing_scripts/
 │   ├── 01_edit_raw_data_shrubs_in_snowbeds_COAT.R
 │   ├── correct_annual_files.R
 │   ├── download_portal_files_for_comparison.R
 │   └── compare_portal_and_box_files.R
-├── data_preprocessing_scripts/
+├── data_postprocessing_scripts/
 ├── state_variable_scripts/
 ├── .gitignore
 ├── CITATION.cff
@@ -44,13 +44,13 @@ The dataset page holds the raw-derived data files prepared with the scripts in `
 └── small_rodent_module.Rproj
 ```
 
-## `Raw_data_processing_scripts/`
+## `raw_data_processing_scripts/`
 
 This folder contains scripts for processing raw field data. The scripts may include checks, corrections, formatting and preparation of files before they are uploaded to the COAT data portal.
 
-## `data_preprocessing_scripts/`
+## `data_postprocessing_scripts/`
 
-This folder contains scripts for preprocessing data before further analyses or calculation of state variables.
+This folder contains scripts for post-processing data before further analyses.
 
 ## `state_variable_scripts/`
 
@@ -82,10 +82,10 @@ The workflow prepares raw field data before it is uploaded to the COAT data port
 
 | Script | Purpose |
 |---|---|
-| `Raw_data_processing_scripts/01_edit_raw_data_shrubs_in_snowbeds_COAT.R` | Yearly workflow. Reads raw field files, runs checks, reformats to COAT variable names, reshapes to long format and writes the portal file |
-| `Raw_data_processing_scripts/correct_annual_files.R` | One-off fixes to raw data files that have already been prepared for the portal |
-| `Raw_data_processing_scripts/download_portal_files_for_comparison.R` | Downloads selected files from the COAT data portal for comparison |
-| `Raw_data_processing_scripts/compare_portal_and_box_files.R` | Compares the downloaded portal files with the corrected files stored in Box |
+| `raw_data_processing_scripts/01_edit_raw_data_shrubs_in_snowbeds_COAT.R` | Yearly workflow. Reads raw field files, runs checks, reformats to COAT variable names, reshapes to long format and writes the portal file |
+| `raw_data_processing_scripts/correct_annual_files.R` | One-off fixes to raw data files that have already been prepared for the portal |
+| `raw_data_processing_scripts/download_portal_files_for_comparison.R` | Downloads selected files from the COAT data portal for comparison |
+| `raw_data_processing_scripts/compare_portal_and_box_files.R` | Compares the downloaded portal files with the corrected files stored in Box |
 
 ## `01_edit_raw_data_shrubs_in_snowbeds_COAT.R`
 Based on Eeva's 2017 template (`Template snowbed vegetation data.xlsx`). Last updated by Eeva 17.10.2023.
@@ -130,7 +130,7 @@ Reads the raw data files already prepared for the portal and writes corrected ve
 
 If it is unclear whether the corrected or the old version of a file is on the COAT data portal, the portal file can be downloaded and compared with the corrected file in Box. This is a check only and does not change anything on the portal.
 
-See [`Raw_data_processing_scripts/README.md`](Raw_data_processing_scripts/README.md) for instructions. Results can be logged in GitHub Issues.
+See [`Raw_data_processing_scripts/README.md`](raw_data_processing_scripts/README.md) for instructions. Results can be logged in GitHub Issues.
 
 ## Yearly routine (checklist)
 
