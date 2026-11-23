@@ -29,13 +29,13 @@ The dataset page holds the raw-derived data files prepared with the scripts in `
 ## Repository structure
 
 ```text
-.
+├── data_postprocessing_scripts/
 ├── raw_data_processing_scripts/
 │   ├── 01_edit_raw_data_shrubs_in_snowbeds_COAT.R
 │   ├── correct_annual_files.R
 │   ├── download_portal_files_for_comparison.R
 │   └── compare_portal_and_box_files.R
-├── data_postprocessing_scripts/
+├── renv/
 ├── state_variable_scripts/
 ├── .gitignore
 ├── CITATION.cff
@@ -52,6 +52,8 @@ This folder contains scripts for processing raw field data. The scripts may incl
 
 This folder contains scripts for post-processing data before further analyses.
 
+## `renv/`
+This folder tracks R packages and dependencies required for this repository.
 ## `state_variable_scripts/`
 
 This folder contains scripts for calculating state variables and other derived measures for the small rodent module.
