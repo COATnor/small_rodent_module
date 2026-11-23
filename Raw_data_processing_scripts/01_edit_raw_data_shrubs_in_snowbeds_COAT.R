@@ -3,7 +3,6 @@
 ################# Background  ----
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
-#A new comment line added as an example
 # The script first reads in selected datafiles on shrub counts in snowbeds, based on template written by Eeva in 2017.
 # (Template snowbed vegetation data.xlsx)
 # Data from Komag and from Vestre Jakobselv are run through a spell check part separately, and combined afterwards.
